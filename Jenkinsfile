@@ -1,39 +1,22 @@
-pipeline {
+// Run stages only if the branch is master
+piepline {
     agent any 
-    
-    parameters {
-        string defaultValue: 'main', name: 'BRANCH', trim: true
-    }
-
-    environment {
-        BRANCH_NAME = "${BRANCH}"
-    }
-
-    stages{
-        stage('BUILD') {
+    stages {
+        stage('STAGE-1') {
+            when {
+                branch 'main'
+            }
             steps{
-                 sh '''
-                    sleep 5
-                    echo "This is a BUILD stage $BRANCH_NAME"
-                '''
+                sh "echo STAGE-2 executes if branch is main"
             }
         }
 
-        stage('TEST') {
-            steps {
-                sh '''
-                    sleep 6
-                    echo "This is a TEST stage $BRANCH_NAME"
-                '''
+        stage('STAGE-2'){
+            when {
+                branch 'test'
             }
-        }
-
-        stage('DEPLOY') {
             steps{
-                sh '''
-                    sleep 5
-                    echo "This is a DEPLOY stage $BRANCH_NAME"
-                '''
+                sh "echo STAGE-2 executes if branch is main"
             }
         }
     }
